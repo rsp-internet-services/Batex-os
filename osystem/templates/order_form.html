@@ -1,0 +1,33 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Pedidos</h1>
+<form action="" method="post" name="login">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+    <p>
+        Numero Pedido:
+        {{ form.order_number(size=10) }}
+        Data:
+        {{ form.date(size=19) }}
+        <br />
+        <br />
+        Cliente:
+        {{ form.costumer(size=64) }}
+        <br/>
+        {% for field in form.items %}
+            <br />
+            {% for subfield in field %}
+                {% if subfield.type != 'CSRFTokenField' %}
+                    {{ subfield.label }} {{ subfield }} 
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.add_recipient }}
+    </p>
+    <p><input type="submit" value="Salvar"></p>
+</form>
+{% endblock %}

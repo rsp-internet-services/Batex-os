@@ -5,8 +5,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(64))
+    user_name = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -27,11 +27,24 @@ class User(db.Model):
         return '<User %r, id %r>' % (self.username, self.id)
 
 
-class Post(db.Model):
+class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    name = db.Column(db.String(128))
+    price = db.Column(db.Float)
+
+
+class OrderItems(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_order = db.Column(db.Integer, db.ForeignKey('order.id'))
+    id_product = db.Column(db.Integer, db.ForeignKey('product.id'))
+
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     timestamp = db.Column(db.DateTime)
+    costumer = db.Column(db.String(128))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    order_items = db.Column(db.Integer, db.ForeignKey('OrderItems.id'))
 
     def __repr__(self):
-        return '<Post %r>' % (self.body)
+        return '<Post %r>' % (self.id)
