@@ -12,7 +12,7 @@ class LoginForm(Form):
 
 
 class OrderItem(Form):
-    product_id = DecimalField('Codigo')
+    id_product = FloatField('Codigo')
     qtd = DecimalField('Quantidade')
     product_name = StringField('Name')
     description = StringField('Description')
@@ -23,5 +23,5 @@ class OrderForm(Form):
     order_number = DecimalField('Numero do Pedido')
     date = DateTimeField('Data', format="%Y-%m-%d %H:%M:%S", default=datetime.datetime.today)
     costumer = StringField('Cliente')
-    items = FieldList(FormField(OrderItem), min_entries=2)
+    items = FieldList(FormField(OrderItem), min_entries=1)
     add_recipient = SubmitField()

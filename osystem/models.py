@@ -35,8 +35,11 @@ class Product(db.Model):
 
 class OrderItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    id_order = db.Column(db.Integer, db.ForeignKey('order.id'))
+    id_order = db.Column(db.Float, db.ForeignKey('order.id'))
     id_product = db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    def __repr__(self):
+        return '<Order_item %r, Order %r>' % (self.id, self.id_order)
 
 
 class Order(db.Model):
@@ -44,7 +47,7 @@ class Order(db.Model):
     timestamp = db.Column(db.DateTime)
     costumer = db.Column(db.String(128))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    order_items = db.Column(db.Integer, db.ForeignKey('OrderItems.id'))
+    order_items = db.Column(db.Integer, db.ForeignKey('order_items.id'))
 
     def __repr__(self):
-        return '<Post %r>' % (self.id)
+        return '<Order %r>' % (self.id)

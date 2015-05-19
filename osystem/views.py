@@ -1,5 +1,5 @@
 from osystem import app, lm, db
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, flash
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from .forms import LoginForm, OrderForm
 from .models import User, Order, OrderItems
@@ -59,21 +59,24 @@ def order():
     form.order_number.data = 1
     if form.add_recipient.data:
         form.items.append_entry()
+
     if request.method == 'POST':
         order = Order()
-        order_items = OrderItems()
-        for item in form.items.data:
-            order_items.id_order = order.id
-            order_items.product_id = item['product_id']
-            db.session.add(order_items)
-
-        order.date = form.date.data
+        order.timestamp = form.date.data
         order.costumer = form.costumer.data
         db.session.add(order)
+        db.session.commit()
+        for item in form.items.data:
+            order_items = OrderItems()
+            order_items.id_order = order.id
+            order_items.id_product = item['id_product']
+            db.session.add(order_items)
+            db.session.commit()
 
         order.order_items = order_items.id
-
         db.session.commit()
+        flash(order.id)
+
     return render_template('order_form.html', form=form)
 
 
